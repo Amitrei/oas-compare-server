@@ -28,6 +28,7 @@ func HttpLogger(log *zap.Logger) echo.MiddlewareFunc {
 
 			fields := []zapcore.Field{
 				zap.Int("status", res.Status),
+				zap.String("traceId", traceId),
 				zap.String("latency", time.Since(start).String()),
 				zap.String("id", traceId),
 				zap.String("method", req.Method),

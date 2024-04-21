@@ -18,6 +18,10 @@ func InitLogger() {
 
 }
 
+func GetLogger() *zap.Logger {
+	return logger
+}
+
 func GetContextLogger(ctx echo.Context) *zap.Logger {
 
 	start := time.Now()

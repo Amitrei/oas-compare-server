@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"time"
 
 	"github.com/go-redis/redis"
 )
@@ -29,5 +30,5 @@ func (r *RedisClient) Get(key string) (interface{}, error) {
 	return r.client.Get(key).Result()
 }
 func (r *RedisClient) Set(key string, value interface{}) error {
-	return r.client.Set(key, value, 0).Err()
+	return r.client.Set(key, value, (24*7)*time.Hour).Err()
 }

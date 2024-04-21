@@ -1,8 +1,20 @@
 package database
 
-import "context"
+import (
+	"context"
+)
 
-var DatabaseClientRef DatabaseClient
+var databaseClientRef DatabaseClient
+
+func InitDatabaseClient(databaseClient *DatabaseClient) {
+	if databaseClientRef == nil {
+		databaseClientRef = *databaseClient
+	}
+}
+
+func GetDatabaseClient() DatabaseClient {
+	return databaseClientRef
+}
 
 type DatabaseClient interface {
 	NewClient(clientConfig *ClientConfiguration) DatabaseClient

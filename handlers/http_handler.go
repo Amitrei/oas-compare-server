@@ -34,7 +34,7 @@ func GetHandlers() []HttpHandler {
 func GetReportHandler() HttpHandler {
 	handlerFunc := func(ctx echo.Context) error {
 		id := ctx.Param("id")
-		report, err := database.DatabaseClientRef.Get(id)
+		report, err := database.GetDatabaseClient().Get(id)
 		if err != nil {
 			// TODO Create a 404 HTML
 			return ctx.HTML(200, "")
@@ -47,7 +47,6 @@ func GetReportHandler() HttpHandler {
 
 func CreateReportHandler() HttpHandler {
 	handlerFunc := func(ctx echo.Context) error {
-
 		reportId := uuid.NewV4().String()
 
 		requestBody := createReportRequest{}
@@ -58,7 +57,8 @@ func CreateReportHandler() HttpHandler {
 			return ctx.JSON(400, createReportResponse{ReportId: reportId, Error: err.Error()})
 		}
 
-		err = database.DatabaseClientRef.Set(reportId, report)
+		err = database.GetDatabaseClient().Set(reportId, report)
+
 		if err != nil {
 			return ctx.JSON(400, createReportResponse{ReportId: reportId, Error: err.Error()})
 		}

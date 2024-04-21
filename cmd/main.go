@@ -7,6 +7,7 @@ import (
 
 	"github.com/amitrei/oas-compare-server/database"
 	"github.com/amitrei/oas-compare-server/http"
+	"github.com/amitrei/oas-compare-server/logger"
 )
 
 func main() {
@@ -23,7 +24,8 @@ func main() {
 		errMessage := fmt.Sprintf("Failed initializing the database due to the following error: %s", err.Error())
 		log.Fatal(errMessage)
 	}
-	database.DatabaseClientRef = databaseClient
 
+	logger.InitLogger()
+	database.InitDatabaseClient(&databaseClient)
 	http.NewHttpServer()
 }

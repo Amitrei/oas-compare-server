@@ -3,10 +3,10 @@ module github.com/amitrei/oas-compare-server
 go 1.22.2
 
 require (
-	github.com/bsm/ginkgo/v2 v2.12.0
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/pb33f/openapi-changes v0.0.61
+	github.com/twinj/uuid v1.0.0
 	go.uber.org/zap v1.27.0
 	gopkg.in/validator.v2 v2.0.1
 )
@@ -22,7 +22,6 @@ require (
 	github.com/dprotaso/go-yit v0.0.0-20220510233725-9ba8df137936 // indirect
 	github.com/gdamore/encoding v1.0.0 // indirect
 	github.com/gdamore/tcell/v2 v2.7.4 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/gookit/color v1.5.4 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
@@ -38,7 +37,6 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/spf13/cobra v1.8.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/twinj/uuid v1.0.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/vmware-labs/yaml-jsonpath v0.3.2 // indirect

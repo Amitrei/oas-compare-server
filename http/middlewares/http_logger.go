@@ -1,52 +1,32 @@
 package middlewares
 
 import (
-	"time"
-
+	"github.com/amitrei/oas-compare-server/logger"
 	"github.com/labstack/echo"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 )
 
-func HttpLogger(log *zap.Logger) echo.MiddlewareFunc {
+func HttpLogger() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			start := time.Now()
 
 			err := next(c)
 			if err != nil {
 				c.Error(err)
 			}
 
-			req := c.Request()
 			res := c.Response()
-
-			traceId := req.Header.Get("X-B3-TraceId")
-			if traceId == "" {
-				traceId = res.Header().Get(echo.HeaderXRequestID)
-			}
-
-			fields := []zapcore.Field{
-				zap.Int("status", res.Status),
-				zap.String("traceId", traceId),
-				zap.String("latency", time.Since(start).String()),
-				zap.String("id", traceId),
-				zap.String("method", req.Method),
-				zap.String("uri", req.RequestURI),
-				zap.String("host", req.Host),
-				zap.String("remote_ip", c.RealIP()),
-			}
+			log := logger.GetContextLogger(c)
 
 			n := res.Status
 			switch {
 			case n >= 500:
-				log.Error("Server error", fields...)
+				log.Error("Server error")
 			case n >= 400:
-				log.Warn("Client error", fields...)
+				log.Warn("Client error")
 			case n >= 300:
-				log.Info("Redirection", fields...)
+				log.Info("Redirection")
 			default:
-				log.Info("Success", fields...)
+				log.Info("Success")
 			}
 
 			return nil

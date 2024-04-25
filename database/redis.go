@@ -12,6 +12,18 @@ type RedisClient struct {
 	context context.Context
 }
 
+func NewRedisClient(clientConfiguration *ClientConfiguration) DatabaseClient {
+	redisClient := RedisClient{}
+
+	redisClient.client = redis.NewClient(&redis.Options{
+		Addr:     clientConfiguration.Address,
+		Password: clientConfiguration.Password,
+		DB:       0,
+	})
+	redisClient.context = clientConfiguration.Context
+	return &redisClient
+}
+
 func (r *RedisClient) NewClient(clientConfiguration *ClientConfiguration) DatabaseClient {
 	r.client = redis.NewClient(&redis.Options{
 		Addr:     clientConfiguration.Address,

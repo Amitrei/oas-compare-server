@@ -21,18 +21,11 @@ func main() {
 		logger.Warn(warningMessage)
 	}
 
-	redis := database.RedisClient{}
-	databaseClient := redis.NewClient(&database.ClientConfiguration{
+	databaseClient := database.NewRedisClient(&database.ClientConfiguration{
 		Address:  os.Getenv("DATABASE_ADDRESS"),
 		Password: os.Getenv("DATABASE_PASSWORD"),
 		Context:  context.Background(),
 	})
-
-	err = databaseClient.HealthCheck()
-	if err != nil {
-		errMessage := fmt.Sprintf("Failed initializing the database due to the following error: %s", err.Error())
-		logger.Fatal(errMessage)
-	}
 
 	database.InitDatabaseClient(&databaseClient)
 	http.NewHttpServer()

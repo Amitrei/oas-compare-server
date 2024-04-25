@@ -91,8 +91,8 @@ func generateReport(request *createReportRequest) ([]byte, error) {
 
 	// Wrapping compare function in a go routine due to an internal Fatal throwing that cannot be handled In cases of schema references not found.
 	doneChan := make(chan []byte, 1)
-	errChan := make(chan model.ProgressError, 100)
-	progressChan := make(chan *model.ProgressUpdate, 100)
+	errChan := make(chan model.ProgressError, 50)
+	progressChan := make(chan *model.ProgressUpdate, 50)
 
 	go func() {
 		report, _ := cmd.RunLeftRightHTMLReportViaString(string(request.Original),

@@ -34,16 +34,16 @@ type createReportResponse struct {
 }
 
 type HandlerError struct {
-	Status  int
+	Code    int
 	Message string
 }
 
 func GlobalErrorHandler(error error, ctx echo.Context) {
-	if err, ok := error.(HandlerError); ok {
+	if handlerError, ok := error.(HandlerError); ok {
 		logger := logger.GetContextLogger(ctx)
-		errMessage := fmt.Sprintf("An error was thrown: %s", err.Error())
+		errMessage := fmt.Sprintf("An error was thrown: %s", handlerError.Error())
 		logger.Error(errMessage)
-		ctx.JSON(400, map[string]string{"error": err.Error()})
+		ctx.JSON(handlerError.Code, map[string]string{"error": handlerError.Error()})
 	}
 
 	if he, ok := error.(*echo.HTTPError); ok {
@@ -125,7 +125,7 @@ func generateReport(request *createReportRequest) ([]byte, error) {
 }
 
 func genericHandlerError(error error) HandlerError {
-	return HandlerError{Status: 400, Message: error.Error()}
+	return HandlerError{Code: 400, Message: error.Error()}
 }
 
 func (h HandlerError) Error() string {

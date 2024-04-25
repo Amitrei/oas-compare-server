@@ -1,15 +1,21 @@
 package handlers
 
 import (
+	_ "embed"
+	"fmt"
 	"net/http"
 
 	"github.com/amitrei/oas-compare-server/database"
+	"github.com/amitrei/oas-compare-server/logger"
 	"github.com/labstack/echo"
 	"github.com/pb33f/openapi-changes/cmd"
 	"github.com/pb33f/openapi-changes/model"
 	"github.com/twinj/uuid"
 	"gopkg.in/validator.v2"
 )
+
+//go:embed  resources/notfound-page.html
+var notFoundPage string
 
 type HttpHandler struct {
 	HandlerFunc echo.HandlerFunc
@@ -27,6 +33,15 @@ type createReportResponse struct {
 	Error    string `json:"error"`
 }
 
+func GlobalErrorHandler(error error, ctx echo.Context) {
+	if error != nil {
+		logger := logger.GetContextLogger(ctx)
+		errMessage := fmt.Sprintf("An error was thrown: %s", error.Error())
+		logger.Error(errMessage)
+		ctx.JSON(400, map[string]string{"error": error.Error()})
+	}
+}
+
 func GetHandlers() []HttpHandler {
 	return []HttpHandler{CreateReportHandler(), GetReportHandler()}
 }
@@ -36,8 +51,7 @@ func GetReportHandler() HttpHandler {
 		id := ctx.Param("id")
 		report, err := database.GetDatabaseClient().Get(id)
 		if err != nil {
-			// TODO Create a 404 HTML
-			return ctx.HTML(200, "")
+			return ctx.HTML(200, notFoundPage)
 		}
 		return ctx.HTML(200, report.(string))
 	}
@@ -54,13 +68,13 @@ func CreateReportHandler() HttpHandler {
 
 		report, err := generateReport(&requestBody)
 		if err != nil {
-			return ctx.JSON(400, createReportResponse{ReportId: reportId, Error: err.Error()})
+			return err
 		}
 
 		err = database.GetDatabaseClient().Set(reportId, report)
 
 		if err != nil {
-			return ctx.JSON(400, createReportResponse{ReportId: reportId, Error: err.Error()})
+			return err
 		}
 
 		return ctx.JSON(200, createReportResponse{ReportId: reportId})

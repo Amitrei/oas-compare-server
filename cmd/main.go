@@ -16,7 +16,6 @@ func main() {
 	logger.InitLogger()
 	logger := logger.GetLogger()
 	err := godotenv.Load()
-
 	if err != nil {
 		warningMessage := fmt.Sprintf("Failed loading .env file due to the following error: %s", err)
 		logger.Warn(warningMessage)

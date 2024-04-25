@@ -44,3 +44,32 @@ func GetContextLogger(ctx echo.Context) *zap.Logger {
 
 	return logger.With(fields...)
 }
+
+func HttpLogger() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+
+			err := next(c)
+			if err != nil {
+				c.Error(err)
+			}
+
+			res := c.Response()
+			log := GetContextLogger(c)
+
+			n := res.Status
+			switch {
+			case n >= 500:
+				log.Error("Server error")
+			case n >= 400:
+				log.Error("Client error")
+			case n >= 300:
+				log.Info("Redirection")
+			default:
+				log.Info("Success")
+			}
+
+			return nil
+		}
+	}
+}

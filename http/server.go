@@ -13,18 +13,17 @@ import (
 
 func NewHttpServer() {
 	e := echo.New()
-	e.Use(logger.HttpLogger())
 	e.HTTPErrorHandler = handlers.GlobalErrorHandler
 
+	group := e.Group("/oas-report-server/v1")
+	group.Use(logger.HttpLogger())
 	for _, h := range handlers.GetHandlers() {
-		e.Add(h.Method, h.Path, h.HandlerFunc)
+		group.Add(h.Method, h.Path, h.HandlerFunc)
 	}
 
-	e.GET("/health", healthCheck)
-
+	group.GET("/health", healthCheck)
 	serverPort := fmt.Sprintf(":%s", os.Getenv("SERVER_PORT"))
 	e.Logger.Fatal(e.Start(serverPort))
-
 }
 
 func healthCheck(ctx echo.Context) error {

@@ -33,12 +33,21 @@ type createReportResponse struct {
 	Error    string `json:"error"`
 }
 
+type HandlerError struct {
+	Status  int
+	Message string
+}
+
 func GlobalErrorHandler(error error, ctx echo.Context) {
-	if error != nil {
+	if err, ok := error.(HandlerError); ok {
 		logger := logger.GetContextLogger(ctx)
-		errMessage := fmt.Sprintf("An error was thrown: %s", error.Error())
+		errMessage := fmt.Sprintf("An error was thrown: %s", err.Error())
 		logger.Error(errMessage)
-		ctx.JSON(400, map[string]string{"error": error.Error()})
+		ctx.JSON(400, map[string]string{"error": err.Error()})
+	}
+
+	if he, ok := error.(*echo.HTTPError); ok {
+		ctx.JSON(he.Code, map[string]string{"error": he.Error()})
 	}
 }
 
@@ -68,13 +77,13 @@ func CreateReportHandler() HttpHandler {
 
 		report, err := generateReport(&requestBody)
 		if err != nil {
-			return err
+			return genericHandlerError(err)
 		}
 
 		err = database.GetDatabaseClient().Set(reportId, report)
 
 		if err != nil {
-			return err
+			return genericHandlerError(err)
 		}
 
 		return ctx.JSON(200, createReportResponse{ReportId: reportId})
@@ -113,4 +122,12 @@ func generateReport(request *createReportRequest) ([]byte, error) {
 		}
 	}
 
+}
+
+func genericHandlerError(error error) HandlerError {
+	return HandlerError{Status: 400, Message: error.Error()}
+}
+
+func (h HandlerError) Error() string {
+	return h.Message
 }

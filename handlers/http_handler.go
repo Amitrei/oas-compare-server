@@ -29,8 +29,8 @@ type createReportRequest struct {
 }
 
 type createReportResponse struct {
-	ReportId string `json:"reportId"`
-	Error    string `json:"error"`
+	Id    string `json:"id"`
+	Error string `json:"error"`
 }
 
 type HandlerError struct {
@@ -86,10 +86,10 @@ func CreateReportHandler() HttpHandler {
 			return genericHandlerError(err)
 		}
 
-		return ctx.JSON(200, createReportResponse{ReportId: reportId})
+		return ctx.JSON(200, createReportResponse{Id: reportId})
 	}
 
-	return HttpHandler{HandlerFunc: handlerFunc, Method: http.MethodPost, Path: "/compare"}
+	return HttpHandler{HandlerFunc: handlerFunc, Method: http.MethodPost, Path: "/report"}
 }
 
 func generateReport(request *createReportRequest) ([]byte, error) {

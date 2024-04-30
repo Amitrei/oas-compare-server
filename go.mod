@@ -1,6 +1,6 @@
 module github.com/amitrei/oas-compare-server
 
-go 1.22.2
+go 1.21.6
 
 require (
 	github.com/go-redis/redis v6.15.9+incompatible

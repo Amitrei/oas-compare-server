@@ -4,12 +4,15 @@ go 1.22.2
 
 require (
 	github.com/go-redis/redis v6.15.9+incompatible
+	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo v3.3.10+incompatible
-	github.com/pb33f/openapi-changes v0.0.61
+	github.com/pb33f/openapi-changes v0.0.62
 	github.com/twinj/uuid v1.0.0
 	go.uber.org/zap v1.27.0
 	gopkg.in/validator.v2 v2.0.1
 )
+
+replace github.com/pb33f/openapi-changes v0.0.62 => github.com/amitrei/openapi-changes-offline v1.0.2
 
 require (
 	atomicgo.dev/cursor v0.2.0 // indirect
@@ -24,7 +27,6 @@ require (
 	github.com/gdamore/tcell/v2 v2.7.4 // indirect
 	github.com/gookit/color v1.5.4 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/lithammer/fuzzysearch v1.1.8 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
@@ -32,9 +34,10 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.15 // indirect
-	github.com/pb33f/libopenapi v0.15.14 // indirect
+	github.com/myesui/uuid v1.0.0 // indirect
+	github.com/pb33f/libopenapi v0.16.2 // indirect
 	github.com/pterm/pterm v0.12.79 // indirect
-	github.com/rivo/tview v0.0.0-20240307173318-e804876934a1 // indirect
+	github.com/rivo/tview v0.0.0-20240424133105-0d02bb78244d // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/spf13/cobra v1.8.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
@@ -51,5 +54,6 @@ require (
 	golang.org/x/sys v0.17.0 // indirect
 	golang.org/x/term v0.17.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
+	gopkg.in/stretchr/testify.v1 v1.2.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

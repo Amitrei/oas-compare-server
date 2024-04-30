@@ -15,6 +15,7 @@ func NewHttpServer() {
 	e := echo.New()
 	e.HTTPErrorHandler = handlers.GlobalErrorHandler
 
+	e.Static("/resources", "resources")
 	group := e.Group("/oas-report-server/v1")
 	group.Use(logger.HttpLogger())
 	for _, h := range handlers.GetHandlers() {
